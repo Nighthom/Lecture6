@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Test_4
 {
@@ -52,7 +53,7 @@ namespace Test_4
             player.Pause();  
             player.Next();
             player.Prev();  
-            player.RemoveMusic(0);  
+            player.RemoveMusic(0);
         }
 
         private Post[] posts;
@@ -109,123 +110,91 @@ namespace Test_4
         public string Album { get; set; }
     }
 
-    public class MusicPlayer
+
+    class MusicPlayer
     {
-        private Music[] playlist;
-        private int currentTrackIndex;
+        private List<Music> playlist;
+        private int currentIndex;
+
+        public MusicPlayer()
+        {
+            playlist = new List<Music>();
+            currentIndex = -1;
+        }
 
         public MusicPlayer(int capacity)
         {
-            playlist = new Music[capacity];
-            currentTrackIndex = -1;
+            playlist = new List<Music>(capacity);
+            currentIndex = -1;
         }
 
         public void AddMusic(Music music)
         {
-            for (int i = 0; i < playlist.Length; i++)
-            {
-                if (playlist[i] == null)
-                {
-                    playlist[i] = music;
-                    Console.WriteLine("음악 " + music.Name + " 을(를) 플레이리스트에 추가했습니다.");
-                    return;
-                }
-            }
-            Console.WriteLine("플레이리스트가 가득 찼습니다.");
+            playlist.Add(music);
         }
 
         public void RemoveMusic(int index)
         {
-            if (index < 0 || index >= playlist.Length)
+            if (index >= 0 && index < playlist.Count)
             {
-                Console.WriteLine("잘못된 인덱스입니다.");
-                return;
-            }
-
-            if (playlist[index] == null)
-            {
-                Console.WriteLine("해당 인덱스에는 음악이 아직 잡혀있지 않습니다.");
-                return;
-            }
-
-            Console.WriteLine("음악 " + playlist[index].Name + "을(를) 삭제했습니다.");
-            playlist[index] = null;
-        }
-
-        public void RemoveMusic(string name)
-        {
-            for(int index = 0; index < playlist.Length; index++)
-            {
-                Music music = playlist[index];
-                if (music.Name == name)
-                    RemoveMusic(index);
+                if (index == currentIndex)
+                {
+                    Stop();
+                    currentIndex = -1;
+                }
+                Console.WriteLine("Remove Music " + playlist[index].Name);
+                playlist.RemoveAt(index);
             }
         }
 
         public void Play()
         {
-            if (playlist.Length == 0)
+            if (playlist.Count > 0 && currentIndex < playlist.Count - 1)
             {
-                Console.WriteLine("플레이리스트에 음악이 없습니다.");
-                return;
+                currentIndex++;
+                Console.WriteLine("Now playing: " + playlist[currentIndex].Name);
             }
-            currentTrackIndex = 0;
-            Console.WriteLine("음악 재생중.. " + playlist[currentTrackIndex].Name);
-        }
-
-        public void Play(int index)
-        {
-            if (playlist.Length == 0)
+            else
             {
-                Console.WriteLine("플레이리스트에 음악이 없습니다.");
-                return;
+                Console.WriteLine("No music in playlist.");
             }
-            currentTrackIndex = index;
-            Console.WriteLine("음악 재생중.. " + playlist[currentTrackIndex].Name);
-        }
-
-        public void Pause()
-        {
-            Console.WriteLine("음악을 일시 중지합니다.");
         }
 
         public void Stop()
         {
-            Console.WriteLine("음악을 정지합니다.");
-            currentTrackIndex = -1;
+            Console.WriteLine("Song stopped.");
+        }
+
+        public void Pause()
+        {
+            Console.WriteLine("Song paused.");
         }
 
         public void Next()
         {
-            if (currentTrackIndex == -1)
+            if (playlist.Count > 0 && currentIndex < playlist.Count - 1)
             {
-                Console.WriteLine("음악이 재생되고 있지 않습니다. ");
-                return;
+                currentIndex++;
+                Console.WriteLine("Now playing: " + playlist[currentIndex].Name);
             }
-
-            if (currentTrackIndex >= playlist.Length - 1)
+            else
             {
-                Console.WriteLine("마지막 음악입니다.");
-                return;
+                Console.WriteLine("End of playlist.");
             }
-            Play(currentTrackIndex + 1);
         }
 
         public void Prev()
         {
-            if (currentTrackIndex == -1)
+            if (playlist.Count > 0 && currentIndex > 0)
             {
-                Console.WriteLine("음악이 재생되고 있지 않습니다.");
-                return;
+                currentIndex--;
+                Console.WriteLine("Now playing: " + playlist[currentIndex].Name);
             }
-
-            if (--currentTrackIndex <= 0)
+            else
             {
-                Console.WriteLine("첫 음악입니다.");
-                return;
+                Console.WriteLine("Start of playlist.");
             }
-
-            Play(currentTrackIndex - 1);
         }
     }
 }
+
