@@ -152,6 +152,16 @@ namespace Test_4
             playlist[index] = null;
         }
 
+        public void RemoveMusic(string name)
+        {
+            for(int index = 0; index < playlist.Length; index++)
+            {
+                Music music = playlist[index];
+                if (music.Name == name)
+                    RemoveMusic(index);
+            }
+        }
+
         public void Play()
         {
             if (playlist.Length == 0)
