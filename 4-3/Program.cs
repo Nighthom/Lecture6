@@ -72,6 +72,10 @@ namespace _4_3
         static void Main(string[] args)
         {
             Student student = new Student("윤승준", "20180679", "컴퓨터공학부" , 3,3.9, 1.0, "qqq991124@naver.com", "01022170710");
+            student.CheckAttendance();
+            student.GetScore();
+            student.InputScore(4.5);
+            student.GetScore();
             student.SendEmail("Message");
             student.MakePhoneCall("01021111111");
         }
