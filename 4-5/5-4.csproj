@@ -6,4 +6,8 @@
     <RootNamespace>_4_5</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\4-4\5-5.csproj" />
+  </ItemGroup>
+
 </Project>
