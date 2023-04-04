@@ -16,6 +16,8 @@ namespace Test_4
             Board board = new Board(10);
             board.AddPost("첫 번째 게시글", "안녕하세요. 첫 번째 게시글입니다.", "작성자1");
             board.AddPost("두 번째 게시글", "안녕하세요. 두 번째 게시글입니다.", "작성자2");
+            // 익명 게시물 추가
+            board.AddPost("세 번째 게시글", "안녕하세요. 익명 게시물입니다.");
             Board.Post[] posts = board.GetPosts();
             foreach (Board.Post post in posts)
             {
@@ -25,6 +27,8 @@ namespace Test_4
                 Console.WriteLine($"내용: {post.Content}");
                 Console.WriteLine();
             }
+
+            Console.WriteLine($"게시물 수 : {Post.postCount}");
             /*-----------------------------
                 음악 관리 시스템 TestCase
              ------------------------------*/
@@ -71,6 +75,15 @@ namespace Test_4
             Console.WriteLine();
             player.Stop();
             Console.WriteLine();
+
+            // 음악 수 출력
+            Console.WriteLine("음악 수 : " + Music.MusicCount);
+            Console.WriteLine();
+
+            // Incadance 찾아서 Play
+            player.Play("Incadance");
+            Console.WriteLine();
+
             /*-----------------------------------
             *   호텔 예약 시스템 TestCase
             ------------------------------------*/
@@ -114,6 +127,9 @@ namespace Test_4
 
             StockInvestmentSimulator simulator = new StockInvestmentSimulator(stocks, 1000000.0f);
 
+            Console.WriteLine("등록된 주식 수: " + StockInvestmentSimulator.StockCount);
+            Console.WriteLine();
+
             simulator.BuyStock("삼성전자", 10);
             Console.WriteLine();
             simulator.BuyStock("LG화학", 2);
@@ -142,7 +158,11 @@ namespace Test_4
             public string Title { get; set; }
             public string Content { get; set; }
             public DateTime PostedTime { get; set; }
-            public string Author { get; set; }
+
+            // 인스턴스 변수
+            public string Author;
+            // 클래스 변수
+            public static int postCount = 0;
 
             public Post(string title, string content, DateTime postedTime, string author)
             {
@@ -150,13 +170,13 @@ namespace Test_4
                 Content = content;
                 PostedTime = postedTime;
                 Author = author;
+                postCount++;
             }
         }
 
         public Board(int capacity)
         {
             posts = new Post[capacity];
-            postCount = 0;
         }
 
         // 게시글 추가 메서드
@@ -164,7 +184,14 @@ namespace Test_4
         {
             Post post = new Post(title, content, DateTime.Now, author);
             posts[postCount] = post;
-            postCount++;
+            postCount = Post.postCount;
+        }
+        // 게시글 추가 메서드 오버로딩버전(익명 추가)
+        public void AddPost(string title, string content)
+        {
+            Post post = new Post(title, content, DateTime.Now, "익명");
+            posts[postCount] = post;
+            postCount = Post.postCount;
         }
 
         // 게시글 목록 가져오기 메서드
@@ -182,9 +209,17 @@ namespace Test_4
     // 음악 재생 클래스
     public class Music
     {
+        // 속성
         public string Name { get; set; }
         public string Artist { get; set; }
         public string Album { get; set; }
+
+        static public int MusicCount = 0;
+
+        public Music()
+        {
+            MusicCount++;
+        }
     }
 
     /* ---------------------------------
@@ -192,7 +227,9 @@ namespace Test_4
      ---------------------------------- */
     class MusicPlayer
     {
+        // 인스턴스 변수
         private List<Music> playlist;
+        // 인스턴스 변수
         private int currentIndex;
 
         public MusicPlayer()
@@ -228,15 +265,29 @@ namespace Test_4
 
         public void Play()
         {
-            if (playlist.Count > 0 && currentIndex < playlist.Count - 1)
+            Next();
+        }
+
+        public void Play(Music music)
+        {
+            Console.WriteLine("Now playing: " + music.Name);
+        }
+        // Play 오버로딩 / 노래 제목에 해당하는 노래를 찾아서 Play
+        public void Play(string songName)
+        {
+            int tmpIdx = 0;
+            foreach(Music currSong in playlist)
             {
-                currentIndex++;
-                Console.WriteLine("Now playing: " + playlist[currentIndex].Name);
+                tmpIdx++;
+                if(currSong.Name == songName)
+                {
+                    currentIndex = tmpIdx;
+                    Play(currSong);
+                    return;
+                }
             }
-            else
-            {
-                Console.WriteLine("No music in playlist.");
-            }
+
+            Console.WriteLine("This song has not found in songlists.");
         }
 
         public void Stop()
@@ -254,7 +305,7 @@ namespace Test_4
             if (playlist.Count > 0 && currentIndex < playlist.Count - 1)
             {
                 currentIndex++;
-                Console.WriteLine("Now playing: " + playlist[currentIndex].Name);
+                Play(playlist[currentIndex]);
             }
             else
             {
@@ -295,12 +346,15 @@ namespace Test_4
     public class HotelBooking
     {
         public HotelBooking() { Guest = new Guest(); BookingId = ++bookingCount; }
-        public Guest Guest { get; set; }  
-        public int BookingId { get; set; }
+        public Guest Guest { get; set; }
+
+        // 인스턴스 변수 사용
+        public int BookingId;
         public string RoomNum { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
 
+        // 클래스 변수 사용
         static private int bookingCount = 0;
     }
 
@@ -342,6 +396,7 @@ namespace Test_4
             Console.WriteLine("체크아웃 날자 : " + hotelBooking.CheckOutDate.ToString());
             Console.WriteLine("예약 번호 : " + hotelBooking.BookingId);
         }
+        // 메서드 오버로딩 사용
         public void PrintBookingData(string guestName)
         {
             HotelBooking findData = FindBookingData(guestName);
@@ -407,15 +462,24 @@ namespace Test_4
     {
         private Dictionary<string, float> stocks; // 주식 종목과 가격 정보를 담고 있는 딕셔너리
         private Dictionary<string, int> portfolio; // 보유한 주식 종목과 수량 정보를 담고 있는 딕셔너리
-        private float balance; // 현재 계좌 잔고
+        // 속성 사용
+        public float balance { get; set; }
 
+        // 클래스 메서드 사용
+        public static int StockCount = 0;
         public StockInvestmentSimulator(Dictionary<string, float> stocks, float initialBalance)
         {
             this.stocks = stocks;
             portfolio = new Dictionary<string, int>();
             balance = initialBalance;
+            StockCount = stocks.Count;
         }
 
+        // 주식 1개만 구매하는 경우를 오버로딩
+        public void BuyStock(string stockName)
+        {
+            BuyStock(stockName, 1);
+        }
         public void BuyStock(string stockName, int quantity)
         {
             float price = stocks[stockName];

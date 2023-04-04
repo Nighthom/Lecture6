@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 
 namespace _4_3
 {
@@ -13,7 +13,12 @@ namespace _4_3
         public double Score { get; set; }
         public double AttendanceRate { get; set; }
         public string Email { get; set; }
-        public string PhoneNumber { get; set; }
+
+        // 인스턴스 변수
+        private string PhoneNumber;
+
+        // 클래스 변수
+        public static int studentCount = 0;
 
         public Student()
         {
@@ -25,6 +30,7 @@ namespace _4_3
             AttendanceRate = 0.0;
             Email = "";
             PhoneNumber = "";
+            studentCount++;
         }
         // Constructor
         public Student(string name, string studentNumber, string major, int grade, double score, double attendanceRate, string email, string phoneNumber)
@@ -37,6 +43,7 @@ namespace _4_3
             AttendanceRate = attendanceRate;
             Email = email;
             PhoneNumber = phoneNumber;
+            studentCount++;
         }
 
         // Methods
@@ -48,6 +55,22 @@ namespace _4_3
         public void InputScore(double score)
         {
             Score = score;
+            Console.WriteLine($"{Name} 학생의 성적이 입력되었습니다.");
+        }
+
+        // 성적 리스트를 받아서 평균 점수 입력(메서드 오버로딩)
+        public void InputScore(List<double> scores)
+        {
+            double sum = 0;
+
+            foreach(var score in scores)
+            {
+                sum += score;
+            }
+
+            double average = sum / scores.Count;
+
+            Score = Math.Round(average, 2);
             Console.WriteLine($"{Name} 학생의 성적이 입력되었습니다.");
         }
 
@@ -71,13 +94,24 @@ namespace _4_3
     {
         static void Main(string[] args)
         {
-            Student student = new Student("윤승준", "20180679", "컴퓨터공학부" , 3,3.9, 1.0, "qqq991124@naver.com", "01022170710");
-            student.CheckAttendance();
-            student.GetScore();
-            student.InputScore(4.5);
-            student.GetScore();
-            student.SendEmail("Message");
-            student.MakePhoneCall("01021111111");
+            Student student1 = new Student("윤승준", "20180679", "컴퓨터공학부" , 3,3.9, 1.0, "qqq991124@naver.com", "01022170710");
+            student1.CheckAttendance();
+            student1.GetScore();
+            student1.InputScore(4.5);
+            student1.GetScore();
+            student1.SendEmail("Message");
+            student1.MakePhoneCall("01021111111");
+
+            List<double> scores = new List<double>();
+            scores.Add(4.5);
+            scores.Add(4.3);
+            scores.Add(4.0);
+            student1.InputScore(scores);
+            student1.GetScore();
+
+            Student student2 = new Student("지승하", "20182324", "컴퓨터공학부", 3, 3.9, 1.0, "asdasd@naver.com", "1231231233");
+
+            Console.WriteLine("학생 명수 : " + Student.studentCount);
         }
     }
 }

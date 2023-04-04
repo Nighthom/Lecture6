@@ -12,7 +12,10 @@ namespace _4_4
         public int Quantity { get; set; }
         public int Price { get; set; }
         public string Address { get; set; }
-        public string PhoneNumber { get; set; }
+
+        // 인스턴스 변수
+        private string PhoneNumber;
+        // 클래스 변수
         static private int _id = 0;
 
         // Default Constructor
@@ -80,7 +83,14 @@ namespace _4_4
 
         public void Delivery()
         {
-            Console.WriteLine("배송이 시작되었습니다.");
+            Console.WriteLine($"{CustomerName} 님의 음식이 {Address}로 배송되었습니다. ");
+            Console.WriteLine($"상품명 : {MenuName}");
+        }
+
+        public void Delivery(string address)
+        {
+            Address = address;
+            Delivery();
         }
     }
 
@@ -92,6 +102,9 @@ namespace _4_4
             order.CreateOrder();
             order.Payment();
             order.Delivery();
+
+            Console.WriteLine();
+            order.Delivery("대전 동구 홍도동");
         }
     }
 }

@@ -14,11 +14,15 @@ namespace _4_2
         public int Quantity { get; set; }
         public double Price { get; set; }
         public string Address { get; set; }
-        public string PhoneNumber { get; set; }
 
+        // 인스턴스 변수
+        private string PhoneNumber;
+        // 클래스 변수
         static private int _id = 0;
 
-        // Constructor
+        // 생성자
+        public Order() { }
+        // 생성자 오버로딩
         public Order(string customerName, string orderDate, string orderedProduct, int quantity, double price, string address, string phoneNumber)
         {
             OrderNumber = ++_id;
@@ -55,9 +59,17 @@ namespace _4_2
             Console.WriteLine("주문이 결제되었습니다. \\" + Price);
         }
 
-        public void Deliver()
+        public void Delivery()
         {
-            Console.WriteLine("주문이 배송되었습니다.");
+            Console.WriteLine($"{CustomerName} 님의 주문이 {Address}로 배송되었습니다. ");
+            Console.WriteLine($"상품명 : {OrderedProduct}");
+        }
+
+        // 오버로딩
+        public void Delivery(string address)
+        {
+            Address = address;
+            Delivery();
         }
     }
 
@@ -69,6 +81,10 @@ namespace _4_2
 
             order.CreateOrder();
             order.Pay();
+
+            order.Delivery();
+            Console.WriteLine();
+            order.Delivery("대전시 동구 홍도동");
         }
     }
 }
