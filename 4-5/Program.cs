@@ -21,6 +21,7 @@ namespace Test_4
             Board.Post[] posts = board.GetPosts();
             foreach (Board.Post post in posts)
             {
+                Console.WriteLine("포스트 ID: " + post.postId);
                 Console.WriteLine($"제목: {post.Title}");
                 Console.WriteLine($"작성자: {post.Author}");
                 Console.WriteLine($"작성 시간: {post.PostedTime}");
@@ -159,6 +160,7 @@ namespace Test_4
             public string Content { get; set; }
             public DateTime PostedTime { get; set; }
 
+            public int postId;
             // 인스턴스 변수
             public string Author;
             // 클래스 변수
@@ -171,6 +173,7 @@ namespace Test_4
                 PostedTime = postedTime;
                 Author = author;
                 postCount++;
+                postId = postCount;
             }
         }
 
