@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
+public class PhoneNumber
+{
+    public string phoneNumber = "";
+}
 namespace _4_3
 {
     public class Student
@@ -88,6 +92,12 @@ namespace _4_3
         {
             Console.WriteLine($"{phoneNumber}로 전화를 걸었습니다.");
         }
+
+        // 참조 복사
+        public void GetPhoneNumber(PhoneNumber phoneNumber)
+        {
+            phoneNumber.phoneNumber = PhoneNumber;
+        }
     }
 
     internal class Program
@@ -109,9 +119,14 @@ namespace _4_3
             student1.InputScore(scores);
             student1.GetScore();
 
-            Student student2 = new Student("지승하", "20182324", "컴퓨터공학부", 3, 3.9, 1.0, "asdasd@naver.com", "1231231233");
+            Student student2 = new Student("지승하", "20182324", "컴퓨터공학부", 3, 3.9, 1.0, "asdasd@naver.com", "01012345679");
 
             Console.WriteLine("학생 명수 : " + Student.studentCount);
+
+            // 참조 복사 테스트
+            PhoneNumber phoneNumber = new PhoneNumber();
+            student2.GetPhoneNumber(phoneNumber);
+            Console.WriteLine("현재 전화번호 : " + phoneNumber.phoneNumber);
         }
     }
 }

@@ -3,6 +3,13 @@
 
 namespace _4_1
 {
+
+    public class Process
+    {
+        public Process() { }
+        public Process(string process) { this.process = process; }
+        public string process = "";
+    }
     public class Computer
     {
         public string Brand { get; set; }
@@ -77,6 +84,11 @@ namespace _4_1
         {
             Console.WriteLine("Connect To URL : " + url);
         }
+
+        public void GetCurrProcess(Process process)
+        {
+            process.process = m_nowProcess;
+        }
     }
     internal class Program
     {
@@ -94,6 +106,13 @@ namespace _4_1
 
             computer.SaveFile("C:\\name\\test.txt");
             computer.ConnectToURL("http://www.naver.com");
+
+            computer.ExecuteProgram("Chrome.exe");
+
+            // 참조 복사 실험 코드
+            Process currProcess = new Process();
+            computer.GetCurrProcess(currProcess);
+            Console.WriteLine("Now Process : " + currProcess.process);
         }
     }
 }

@@ -1,5 +1,9 @@
 ﻿using System;
-
+using System.Net;
+public class Address
+{
+    public string addr = "";
+}
 namespace _4_4
 {
     public class FoodOrderSystem
@@ -92,6 +96,12 @@ namespace _4_4
             Address = address;
             Delivery();
         }
+
+        // 참조 복사
+        public void GetCurrAddr(Address addr)
+        {
+            addr.addr = Address;
+        }
     }
 
     internal class Program
@@ -105,6 +115,11 @@ namespace _4_4
 
             Console.WriteLine();
             order.Delivery("대전 동구 홍도동");
+
+            // 참조 복사 실험 코드
+            Address addr = new Address();
+            order.GetCurrAddr(addr);
+            Console.WriteLine("현재 주소 : " + addr.addr);
         }
     }
 }
