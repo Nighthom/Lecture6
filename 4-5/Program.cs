@@ -463,12 +463,13 @@ namespace Test_4
      ---------------------------------- */
     public class StockInvestmentSimulator
     {
+        // 인스턴스 변수 사용
         private Dictionary<string, float> stocks; // 주식 종목과 가격 정보를 담고 있는 딕셔너리
         private Dictionary<string, int> portfolio; // 보유한 주식 종목과 수량 정보를 담고 있는 딕셔너리
         // 속성 사용
         public float balance { get; set; }
 
-        // 클래스 메서드 사용
+        // 클래스 변수 사용
         public static int StockCount = 0;
         public StockInvestmentSimulator(Dictionary<string, float> stocks, float initialBalance)
         {
