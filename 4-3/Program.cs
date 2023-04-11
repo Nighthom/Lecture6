@@ -87,10 +87,14 @@ namespace _4_3
         {
             Console.WriteLine($"{Email}로 이메일을 발송했습니다. 내용: {message}");
         }
-
+        // 해당 메서드는 값을 복사해서 내부의 WriteLine 함수에 전달한다.
+        // 값 복사에 해당하기 때문에 사용중인 값을 다른 값으로 변경해도 
+        // 다른 값에는 영향을 미치지 않는다.
         public void MakePhoneCall(string phoneNumber)
         {
             Console.WriteLine($"{phoneNumber}로 전화를 걸었습니다.");
+            // null로 밀어도 원본 Data에는 영향 X!
+            phoneNumber = null;
         }
 
         // 참조 복사

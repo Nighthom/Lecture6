@@ -90,10 +90,14 @@ namespace _4_4
             Console.WriteLine($"{CustomerName} 님의 음식이 {Address}로 배송되었습니다. ");
             Console.WriteLine($"상품명 : {MenuName}");
         }
-
+        // 해당 메서드는 값을 복사해서 내부의 WriteLine 함수에 전달한다.
+        // 값 복사에 해당하기 때문에 사용중인 값을 다른 값으로 변경해도 
+        // 다른 값에는 영향을 미치지 않는다.
         public void Delivery(string address)
         {
             Address = address;
+            // null로 밀어도 원본은 영향 X!
+            address = null;
             Delivery();
         }
 
